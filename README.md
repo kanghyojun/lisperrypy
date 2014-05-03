@@ -9,6 +9,9 @@ Usage
 
     from pylisp import pylisp
 
-    @pylisp
-    def lisp_sum(x, y)
-        return '(+ %s %s)' % (x, y)
+
+```python
+@pylisp
+def lisp_sum(x, y)
+    return '(+ %s %s)' % (x, y)
+```
