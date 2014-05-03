@@ -6,17 +6,24 @@ from .types import Operator
 
 
 WHITESPACE = ' '
+LB = '\n'
 BRACE = ('(', ')', '[', ']')
 RE = {'NUMBERS': compile(r'[0-9]+\.?[0-9]*'),
       'OPERATOR': compile(r'[\+\-\*\/]')}
+ENV = {
+    '+': lambda x: sum(x),
+    '*': lambda x: reduce(lambda z, y: z * y, x),
+    '/': lambda x: reduce(lambda z, y: z / y, x),
+    '-': lambda x: reduce(lambda z, y: z - y, x),
+}
 
 def tokenize(sources):
     r = ''
     for x in sources:
-        if x == WHITESPACE:
+        if x == WHITESPACE or x == LB:
             if r:
                 yield r
-            r = ''
+                r = ''
         elif x in BRACE:
             if r:
                 yield r
@@ -54,3 +61,19 @@ def parse(tokens):
         if token == '(':
             start = i
     return tokens[0]
+
+
+def apply_(op, args):
+    return op(args)
+
+
+def evalu(form, env):
+    if isinstance(form, int):
+        return form
+    elif isinstance(form, Operator) and form.exp in env:
+        return env[form.exp]
+    elif isinstance(form, list):
+        r = []
+        for x in form[1:]:
+            r.append(evalu(x, env))
+        return apply_(evalu(form[0], env), r)
