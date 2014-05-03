@@ -6,4 +6,4 @@ python:
 install: "pip install ."
 
 # command to run tests
-script: "pytest -vv"
+script: "py.test -vv"
