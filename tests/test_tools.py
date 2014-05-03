@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from pylisp.tools import tokenize, parse, apply_, evalu, ENV
-from pylisp.types import Operator
+from pylisp.types import Operator, Number
 
 
 def test_tokenize():
@@ -21,10 +21,10 @@ def test_parse():
     assert isinstance(form[1], list)
     assert isinstance(form[1][0], Operator)
     assert '+' == form[1][0].exp
-    assert 1 == form[1][1]
-    assert 2 == form[1][2]
-    assert 5 == form[2]
-    assert 2 == form[3]
+    assert '1' == form[1][1].exp
+    assert '2' == form[1][2].exp
+    assert '5' == form[2].exp
+    assert '2' == form[3].exp
 
 
 def test_apply():
@@ -32,5 +32,6 @@ def test_apply():
 
 
 def test_eval():
-    tree = [Operator('*'), [Operator('+'), 1, 2], 3]
+    tree = [Operator('*'), [Operator('+'), Number('1'), Number('2')],
+            Number('3')]
     assert 9 == evalu(tree, ENV)

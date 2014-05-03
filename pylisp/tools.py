@@ -2,18 +2,19 @@
 from re import compile
 from itertools import chain
 
-from .types import Operator
+from .types import Operator, Number
 
 
 WHITESPACE = ' '
 LB = '\n'
 BRACE = ('(', ')', '[', ']')
-RE = {'NUMBERS': compile(r'[0-9]+\.?[0-9]*'),
-      'OPERATOR': compile(r'[\+\-\*\/]')}
+RE = {'NUMBERS': compile(r'(-|\+)?[1-9][0-9]*\.?[0-9]*'),
+      'OPERATOR': compile(r'[\+\-\*\/]'),
+      'INTEGER': compile(r'(-|\+)?[1-9][0-9]*$')}
 ENV = {
     '+': lambda x: sum(x),
     '*': lambda x: reduce(lambda z, y: z * y, x),
-    '/': lambda x: reduce(lambda z, y: z / y, x),
+    '/': lambda x: reduce(lambda z, y: z / float(y), x),
     '-': lambda x: reduce(lambda z, y: z - y, x),
 }
 
@@ -37,12 +38,11 @@ def tokenize(sources):
 
 
 def form(tokens):
-    number = lambda x: int(x)
     for t in tokens[1:]:
         if isinstance(t, list):
             yield t
         elif RE['NUMBERS'].match(t):
-            yield number(t)
+            yield Number(t)
         elif RE['OPERATOR']:
             yield Operator(t)
 
@@ -68,8 +68,11 @@ def apply_(op, args):
 
 
 def evalu(form, env):
-    if isinstance(form, int):
-        return form
+    if isinstance(form, Number):
+        if RE['INTEGER'].match(form.exp):
+            return int(form.exp)
+        else:
+            return float(form.exp)
     elif isinstance(form, Operator) and form.exp in env:
         return env[form.exp]
     elif isinstance(form, list):
