@@ -77,6 +77,8 @@ def evalu(form, env):
         return env[form.exp]
     elif isinstance(form, list):
         r = []
-        for x in form[1:]:
+        for x in form:
             r.append(evalu(x, env))
-        return apply_(evalu(form[0], env), r)
+        if callable(r[0]):
+            return apply_(r[0], r[1:])
+        return r
