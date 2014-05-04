@@ -5,9 +5,6 @@ from itertools import chain
 from .types import Operator, Number
 
 
-WHITESPACE = ' '
-LB = '\n'
-BRACE = ('(', ')', '[', ']')
 RE = {
     'NUMBERS': r'((-|\+)?[1-9][0-9]*\.?[0-9]*)',
     'EXPRESSION': r'[^\s\d\(\)\[\]][^\s\(\)\[\]]*',
