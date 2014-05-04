@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from pylisp.tools import tokenize, parse, apply_, evalu, ENV
-from pylisp.types import Operator, Number
+from lisperrypy.tools import tokenize, parse, apply_, evalu, ENV
+from lisperrypy.types import Operator, Number
 
 
 def test_tokenize():

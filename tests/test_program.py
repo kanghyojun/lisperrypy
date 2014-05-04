@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from pylisp import program, pylisp
+from lisperrypy import program, lisperrypy
 
 
 def test_program():

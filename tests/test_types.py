@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from pylisp.tools import evalu, RE
-from pylisp.types import Number
+from lisperrypy.tools import evalu, RE
+from lisperrypy.types import Number
 
 
 def test_float():

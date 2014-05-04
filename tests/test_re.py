@@ -1,4 +1,4 @@
-from pylisp.tools import RE
+from lisperrypy.tools import RE
 from re import match
 
 

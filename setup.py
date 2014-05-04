@@ -1,7 +1,7 @@
 #! -*- coding: utf-8 -*-
 from setuptools import setup, find_packages
 
-setup(name='pylisp',
+setup(name='lisperrypy',
       version='0.0.1',
       author='Kang Hyojun',
       author_email='hyojun@admire.kr',

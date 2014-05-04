@@ -11,7 +11,7 @@ def program(source):
     return eval_
 
 
-def pylisp(f):
+def lisperrypy(f):
     @wraps(f)
     def deco(*args, **kwargs):
         return program(f(*args, **kwargs))
