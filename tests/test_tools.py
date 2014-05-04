@@ -5,15 +5,15 @@ from pylisp.types import Operator, Number
 
 def test_tokenize():
     source = '(+ 1 2)'
-    assert ['(', '+', '1', '2', ')'] == list(tokenize(source))
-    source = '(* (+ 1 2) 5 2)'
-    x = ['(', '*', '(', '+', '1', '2', ')', '5', '2', ')']
-    assert x == list(tokenize(source))
+    assert ['(', '+', '1', '2', ')'] == tokenize(source)
+    source = '(* (+ 2 3) 4 2)'
+    x = ['(', '*', '(', '+', '2', '3', ')', '4', '2', ')']
+    assert x == tokenize(source)
 
 
 def test_parse():
     source = '(* (+ 1 2) 5 2)'
-    t = list(tokenize(source))
+    t = tokenize(source)
     form = parse(t)
     assert form
     assert isinstance(form[0], Operator)

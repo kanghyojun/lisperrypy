@@ -5,7 +5,7 @@ from .tools import tokenize, parse, evalu, ENV
 
 
 def program(source):
-    t = list(tokenize(source))
+    t = tokenize(source)
     form = parse(t)
     eval_ = evalu(form, ENV)
     return eval_

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from re import compile
+from re import compile, match
 from itertools import chain
 
 from .types import Operator, Number
@@ -8,9 +8,12 @@ from .types import Operator, Number
 WHITESPACE = ' '
 LB = '\n'
 BRACE = ('(', ')', '[', ']')
-RE = {'NUMBERS': compile(r'(-|\+)?[1-9][0-9]*\.?[0-9]*'),
-      'OPERATOR': compile(r'[\+\-\*\/]'),
-      'INTEGER': compile(r'(-|\+)?[1-9][0-9]*$')}
+RE = {
+    'NUMBERS': r'((-|\+)?[1-9][0-9]*\.?[0-9]*)',
+    'EXPRESSION': r'[^\s\d\(\)\[\]][^\s\(\)\[\]]*',
+    'BRACES': r'\(|\)|\[|\]',
+    'WHITESPACE': r'\s+'
+}
 ENV = {
     '+': lambda x: sum(x),
     '*': lambda x: reduce(lambda z, y: z * y, x),
@@ -18,32 +21,27 @@ ENV = {
     '-': lambda x: reduce(lambda z, y: z - y, x),
 }
 
-def tokenize(sources):
-    r = ''
-    for x in sources:
-        if x == WHITESPACE or x == LB:
-            if r:
-                yield r
-                r = ''
-        elif x in BRACE:
-            if r:
-                yield r
-                r = ''
-            yield x
-        elif RE['NUMBERS'].match(x):
-            r += x
-        elif RE['OPERATOR'].match(x):
-            r += x
 
+def tokenize(sources):
+    res = []
+    r = compile(r'|'.join(RE.values()))
+    while len(sources) > 0 :
+        pattern = r.match(sources)
+        e = pattern.end()
+        t = sources[:e]
+        if not match(RE['WHITESPACE'], t):
+            res.append(t)
+        sources = sources[e:]
+    return res
 
 
 def form(tokens):
     for t in tokens[1:]:
         if isinstance(t, list):
             yield t
-        elif RE['NUMBERS'].match(t):
+        elif match(RE['NUMBERS'], t):
             yield Number(t)
-        elif RE['OPERATOR']:
+        elif match(RE['EXPRESSION'], t):
             yield Operator(t)
 
 
@@ -68,8 +66,9 @@ def apply_(op, args):
 
 
 def evalu(form, env):
+    integer = r'(-|\+)?[1-9][0-9]*$'
     if isinstance(form, Number):
-        if RE['INTEGER'].match(form.exp):
+        if match(integer, form.exp):
             return int(form.exp)
         else:
             return float(form.exp)
