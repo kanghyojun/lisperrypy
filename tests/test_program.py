@@ -13,12 +13,12 @@ def test_program():
     assert 18 == program(source)
 
 
-@pylisp
+@lisperrypy
 def lisp_sum(x, y):
     return '(+ %s %s)' % (x, y)
 
 
-@pylisp
+@lisperrypy
 def lisp_mixing(x, y):
     return '''
     (*
