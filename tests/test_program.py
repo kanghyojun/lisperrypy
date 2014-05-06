@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from lisperrypy import program, lisperrypy
+from lisperrypy import program, lisperrypy, lisperrypy_with
 
 
 def test_program():
@@ -30,3 +30,16 @@ def lisp_mixing(x, y):
 def test_pylisp_func():
     assert 3 == lisp_sum(1, 2)
     assert 6 == lisp_mixing(1, 2)
+
+
+def abc(x):
+    return sum(x)
+
+
+@lisperrypy_with(env=globals())
+def lisp_py_abc():
+    return '(abc 1 2 3)'
+
+
+def test_lisp_py_abc():
+    assert 6 == lisp_py_abc()
