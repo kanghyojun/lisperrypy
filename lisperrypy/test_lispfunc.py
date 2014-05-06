@@ -13,3 +13,15 @@ def lisp_def():
 
 def test_lisp_def():
     assert 1 == lisp_def()
+
+
+@lisperrypy
+def a():
+    return '''
+        (def x 1)
+        (+ x 1)
+    '''
+
+
+def test_lisp_use():
+    assert 2 == a()

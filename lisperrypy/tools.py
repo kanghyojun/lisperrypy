@@ -35,7 +35,7 @@ def def_(sym, val, env):
     return val
 
 
-ENV = {'+': sum_, '-': sub, '*': mult, '/': div, 'def': def_}
+ENV = {'+': sum_, '-': sub, '*': mult, '/': div}
 
 
 def tokenize(sources):
@@ -92,10 +92,11 @@ def evalu(form, env):
         return env[form.exp]
     elif isinstance(form, list):
         r = []
-        for x in form:
-            r.append(evalu(x, env))
-        if callable(r[0]):
-            if form[0].exp == 'def':
-                r.append(env)
-            return apply_(r[0], r[1:])
+        if form[0].exp == 'def':
+            def_(form[1].exp, evalu(form[2], env), env)
+        else:
+            for x in form:
+                r.append(evalu(x, env))
+            if callable(r[0]):
+                return apply_(r[0], r[1:])
         return r
