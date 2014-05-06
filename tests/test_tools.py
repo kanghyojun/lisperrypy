@@ -14,7 +14,7 @@ def test_tokenize():
 def test_parse():
     source = '(* (+ 1 2) 5 2)'
     t = tokenize(source)
-    form = parse(t)
+    form = parse(t)[0]
     assert form
     assert isinstance(form[0], Operator)
     assert '*' == form[0].exp

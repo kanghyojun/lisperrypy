@@ -14,9 +14,9 @@ RE = {
 
 
 def sum_(*args):
-    print args
     r = reduce(lambda x, y: x + y, args)
     return r
+
 
 def sub(*args):
     return reduce(lambda x, y: x - y, args)
@@ -27,15 +27,15 @@ def div(*args):
 
 
 def mult(*args):
-    print args
     return reduce(lambda x, y: x * y, args)
 
-ENV = {
-    '+': sum_,
-    '-': sub,
-    '*': mult,
-    '/': div,
-}
+
+def def_(sym, val, env):
+    env[sym] = val
+    return val
+
+
+ENV = {'+': sum_, '-': sub, '*': mult, '/': div, 'def': def_}
 
 
 def tokenize(sources):
@@ -74,7 +74,7 @@ def parse(tokens):
                            [tree[start + 1:]],
                            tokens[i + 1:]))
             return parse(l)
-    return tree[0]
+    return tree
 
 
 def apply_(op, args):
@@ -95,5 +95,7 @@ def evalu(form, env):
         for x in form:
             r.append(evalu(x, env))
         if callable(r[0]):
+            if form[0].exp == 'def':
+                r.append(env)
             return apply_(r[0], r[1:])
         return r

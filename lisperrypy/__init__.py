@@ -9,8 +9,12 @@ def program(source, env={}):
         env[k] = v
     t = tokenize(source)
     form = parse(t)
-    eval_ = evalu(form, env)
-    return eval_
+    r = []
+    for f in form:
+        res = evalu(f, env)
+        if res:
+            r.append(res)
+    return r[-1]
 
 
 def lisperrypy(f):
