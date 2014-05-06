@@ -2,7 +2,7 @@
 from re import compile, match
 from itertools import chain
 
-from .types import Operator, Number
+from .types import Operator, Number, LispType
 
 
 RE = {
@@ -51,30 +51,30 @@ def tokenize(sources):
     return res
 
 
-def form(tokens):
-    for t in tokens[1:]:
-        if isinstance(t, list):
-            yield t
-        elif match(RE['NUMBERS'], t):
-            yield Number(t)
-        elif match(RE['EXPRESSION'], t):
-            yield Operator(t)
+def form(t):
+    if t == '(' or isinstance(t, list) or isinstance(t, LispType):
+        r = t
+    elif match(RE['NUMBERS'], t):
+        r = Number(t)
+    elif match(RE['EXPRESSION'], t):
+        r = Operator(t)
+    return r
 
 
 def parse(tokens):
     tree = []
     start = 0
     for i, token in enumerate(tokens):
-        if token != ')':
-            tree.append(token)
-        else:
-            l = list(chain(tokens[:start],
-                           [list(form(tree[start:]))],
-                           tokens[i + 1:]))
-            return parse(l)
         if token == '(':
             start = i
-    return tokens[0]
+        if token != ')':
+            tree.append(form(token))
+        else:
+            l = list(chain(tree[:start],
+                           [tree[start + 1:]],
+                           tokens[i + 1:]))
+            return parse(l)
+    return tree[0]
 
 
 def apply_(op, args):

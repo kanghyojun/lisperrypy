@@ -43,3 +43,12 @@ def lisp_py_abc():
 
 def test_lisp_py_abc():
     assert 6 == lisp_py_abc()
+
+
+@lisperrypy
+def lisp_int():
+    return '1'
+
+
+def test_lisp_int():
+    assert 1 == lisp_int()
