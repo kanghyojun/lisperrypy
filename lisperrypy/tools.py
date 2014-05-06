@@ -11,11 +11,30 @@ RE = {
     'BRACES': r'\(|\)|\[|\]',
     'WHITESPACE': r'\s+'
 }
+
+
+def sum_(*args):
+    print args
+    r = reduce(lambda x, y: x + y, args)
+    return r
+
+def sub(*args):
+    return reduce(lambda x, y: x - y, args)
+
+
+def div(*args):
+    return reduce(lambda x, y: x / float(y), args)
+
+
+def mult(*args):
+    print args
+    return reduce(lambda x, y: x * y, args)
+
 ENV = {
-    '+': lambda x: sum(x),
-    '*': lambda x: reduce(lambda z, y: z * y, x),
-    '/': lambda x: reduce(lambda z, y: z / float(y), x),
-    '-': lambda x: reduce(lambda z, y: z - y, x),
+    '+': sum_,
+    '-': sub,
+    '*': mult,
+    '/': div,
 }
 
 
@@ -59,7 +78,7 @@ def parse(tokens):
 
 
 def apply_(op, args):
-    return op(args)
+    return op(*args)
 
 
 def evalu(form, env):

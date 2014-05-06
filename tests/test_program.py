@@ -32,8 +32,8 @@ def test_pylisp_func():
     assert 6 == lisp_mixing(1, 2)
 
 
-def abc(x):
-    return sum(x)
+def abc(x, y, z):
+    return x + y + z
 
 
 @lisperrypy_with(env=globals())
