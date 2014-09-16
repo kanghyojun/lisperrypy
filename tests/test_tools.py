@@ -28,6 +28,15 @@ def test_float_number_tokenize():
     assert ['(', '+', '12.3123', '123123', ')'] == tokenize(source)
 
 
+def test_symbol_tokenize():
+    source = '(plus maybe 123123)'
+    assert ['(', 'plus', 'maybe', '123123', ')'] == tokenize(source)
+    source = '(plus maybe? 123123)'
+    assert ['(', 'plus', 'maybe?', '123123', ')'] == tokenize(source)
+    source = '(< 1 1.2)'
+    assert ['(', '<', '1', '1.2', ')'] == tokenize(source)
+
+
 def test_parse():
     source = '(* (+ 1 2) 5 2)'
     t = tokenize(source)

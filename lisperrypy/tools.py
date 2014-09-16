@@ -39,6 +39,7 @@ def def_(sym, val, env):
 
 ENV = {'+': sum_, '-': sub, '*': mult, '/': div}
 numbers = ''.join([str(x) for x in range(0,9)]) + '.'
+symbols = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*+_-=<>/?'
 
 
 def tokenize(sources):
@@ -54,9 +55,11 @@ def tokenize(sources):
             i += 1
             continue
         elif t == '"' or t == "'":
-            return tokenize_str(sources[i:])
+            return tokenize_when(sources[i:], when=lambda x: x != t, padd=1)
         elif t in numbers:
-            return tokenize_number(sources[i:])
+            return tokenize_when(sources[i:], when=lambda x: x in numbers)
+        elif t in symbols:
+            return tokenize_when(sources[i:], when=lambda x: x in symbols)
         else:
             r = [t]
         if r is not None:
@@ -65,22 +68,23 @@ def tokenize(sources):
     return [sources]
 
 
-def tokenize_str(sources):
-    b = sources[0]
-    i = 1
-    while sources[i] != b[0]:
-        b += sources[i]
+def tokenize_when(source, when, padd=0):
+    b = ''
+    i = 0 + padd
+    while when(source[i]):
+        b += source[i]
         i += 1
-    return [b + sources[i]] + tokenize(sources[i+1:])
+    if padd != 0:
+        r = ['{}{}{}'.format(source[:padd], b, source[i:i+padd])]
+    else:
+        r = [b]
+    return r + tokenize(source[i+padd:])
 
 
-def tokenize_number(sources):
+def tokenize_symbol(sources):
     b = ''
     i = 0
-    while sources[i] in numbers:
-        b += sources[i]
-        i += 1
-    return [b] + tokenize(sources[i:])
+    return sources
 
 
 def form(t):
