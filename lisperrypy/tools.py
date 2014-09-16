@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from re import compile, match
 from itertools import chain
+from functools import reduce
 
 from .types import Operator, Number, LispType
 
