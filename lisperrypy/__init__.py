@@ -7,7 +7,7 @@ from .tools import tokenize, parse, evalu, ENV
 def program(source, env={}):
     for k, v in ENV.items():
         env[k] = v
-    t = tokenize(source)
+    t = tokenize(source.strip())
     form = parse(t)
     r = []
     for f in form:

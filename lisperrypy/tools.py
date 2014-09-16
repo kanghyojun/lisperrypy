@@ -40,6 +40,7 @@ def def_(sym, val, env):
 ENV = {'+': sum_, '-': sub, '*': mult, '/': div}
 numbers = ''.join([str(x) for x in range(0,9)]) + '.'
 symbols = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*+_-=<>/?'
+braces = ['[', ']', '(', ')', '{', '}']
 
 
 def tokenize(sources):
@@ -49,7 +50,7 @@ def tokenize(sources):
     while i < len(sources) - 1:
         t = sources[i]
         r = None
-        if t == '(' or t == ')' or t == '`':
+        if t in braces or t == '`':
              r = [t]
         elif t in whitespace:
             i += 1
@@ -60,8 +61,6 @@ def tokenize(sources):
             return tokenize_when(sources[i:], when=lambda x: x in numbers)
         elif t in symbols:
             return tokenize_when(sources[i:], when=lambda x: x in symbols)
-        else:
-            r = [t]
         if r is not None:
             return r + tokenize(sources[i+1:])
         i += 1
@@ -79,12 +78,6 @@ def tokenize_when(source, when, padd=0):
     else:
         r = [b]
     return r + tokenize(source[i+padd:])
-
-
-def tokenize_symbol(sources):
-    b = ''
-    i = 0
-    return sources
 
 
 def form(t):
