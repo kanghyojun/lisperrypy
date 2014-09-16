@@ -4,6 +4,14 @@ lisperrypy
 
 Mixing python and lisp!
 
+Python version
+===============
+
+lisperrypy tested on
+
+ - 2.7
+ - 3.4
+
 
 Usage
 ========
