@@ -2,6 +2,7 @@
 from re import compile, match
 from itertools import chain
 from functools import reduce
+from string import whitespace
 
 from .types import Operator, Number, LispType
 
@@ -37,19 +38,49 @@ def def_(sym, val, env):
 
 
 ENV = {'+': sum_, '-': sub, '*': mult, '/': div}
+numbers = ''.join([str(x) for x in range(0,9)]) + '.'
 
 
 def tokenize(sources):
-    res = []
-    r = compile(r'|'.join(RE.values()))
-    while len(sources) > 0 :
-        pattern = r.match(sources)
-        e = pattern.end()
-        t = sources[:e]
-        if not match(RE['WHITESPACE'], t):
-            res.append(t)
-        sources = sources[e:]
-    return res
+    i = 0
+    state = False
+    b = ''
+    while i < len(sources) - 1:
+        t = sources[i]
+        r = None
+        if t == '(' or t == ')' or t == '`':
+             r = [t]
+        elif t in whitespace:
+            i += 1
+            continue
+        elif t == '"' or t == "'":
+            return tokenize_str(sources[i:])
+        elif t in numbers:
+            return tokenize_number(sources[i:])
+        else:
+            r = [t]
+        if r is not None:
+            return r + tokenize(sources[i+1:])
+        i += 1
+    return [sources]
+
+
+def tokenize_str(sources):
+    b = sources[0]
+    i = 1
+    while sources[i] != b[0]:
+        b += sources[i]
+        i += 1
+    return [b + sources[i]] + tokenize(sources[i+1:])
+
+
+def tokenize_number(sources):
+    b = ''
+    i = 0
+    while sources[i] in numbers:
+        b += sources[i]
+        i += 1
+    return [b] + tokenize(sources[i:])
 
 
 def form(t):

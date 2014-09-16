@@ -11,6 +11,23 @@ def test_tokenize():
     assert x == tokenize(source)
 
 
+def test_string_tokenize():
+    source = '(+ "123" "123")'
+    assert ['(', '+', '"123"', '"123"', ')'] == tokenize(source)
+    source = '(+ "1\'23" "123")'
+    assert ['(', '+', '"1\'23"', '"123"', ')'] == tokenize(source)
+
+
+def test_large_number_tokenize():
+    source = '(+ 123123 123123)'
+    assert ['(', '+', '123123', '123123', ')'] == tokenize(source)
+
+
+def test_float_number_tokenize():
+    source = '(+ 12.3123 123123)'
+    assert ['(', '+', '12.3123', '123123', ')'] == tokenize(source)
+
+
 def test_parse():
     source = '(* (+ 1 2) 5 2)'
     t = tokenize(source)
