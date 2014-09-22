@@ -9,7 +9,7 @@ from .types import Operator, Number, LispType
 
 RE = {
     'NUMBERS': r'((-|\+)?[1-9][0-9]*\.?[0-9]*)',
-    'EXPRESSION': r'[^\s\d\(\)\[\]][^\s\(\)\[\]]*',
+    'SYMBOL': r'[^\s\d\(\)\[\]][^\s\(\)\[\]]*',
     'BRACES': r'\(|\)|\[|\]',
     'WHITESPACE': r'\s+'
 }
@@ -85,7 +85,7 @@ def form(t):
         r = t
     elif match(RE['NUMBERS'], t):
         r = Number(t)
-    elif match(RE['EXPRESSION'], t):
+    elif match(RE['SYMBOL'], t):
         r = Operator(t)
     return r
 
