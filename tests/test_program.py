@@ -11,6 +11,8 @@ def test_program():
     assert 36 == program(source)
     source = '(/ (* 2 (+ 1 2) 3 (- 6 4)) 2)'
     assert 18 == program(source)
+    source = '(def a (lambda (f) (lambda (g) (lambda (h) (add f g h))))) (def add (lambda (x y z) (+ x y z))) (((a 1) 1) 1)'
+    assert 3 == program(source)
 
 
 @lisperrypy

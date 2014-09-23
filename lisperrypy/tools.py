@@ -80,30 +80,36 @@ def tokenize_when(source, when, padd=0):
     return r + tokenize(source[i+padd:])
 
 
-def form(t):
-    if t == '(' or isinstance(t, list) or isinstance(t, LispType):
-        r = t
-    elif match(RE['NUMBERS'], t):
-        r = Number(t)
-    elif match(RE['SYMBOL'], t):
-        r = Operator(t)
-    return r
-
-
 def parse(tokens):
-    tree = []
-    start = 0
-    for i, token in enumerate(tokens):
+    parser = Parser(tokens)
+    return parser.parse()
+
+
+class Parser(list):
+    def form(self, t):
+        if t == ')':
+            r = t
+        elif match(RE['NUMBERS'], t):
+            r = Number(t)
+        elif match(RE['SYMBOL'], t):
+            r = Operator(t)
+        return r
+
+    def parse(self):
+        token = self.pop(0) if self else None
         if token == '(':
-            start = i
-        if token != ')':
-            tree.append(form(token))
+            return self.parse_list()
         else:
-            l = list(chain(tree[:start],
-                           [tree[start + 1:]],
-                           tokens[i + 1:]))
-            return parse(l)
-    return tree
+            return self.form(token)
+
+    def parse_list(self):
+        token = ''
+        l = []
+        while token != ')' and self:
+            token = self.parse()
+            if token != ')':
+                l.append(token)
+        return l
 
 
 def apply_(op, args):
