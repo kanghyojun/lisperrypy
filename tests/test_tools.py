@@ -40,8 +40,7 @@ def test_symbol_tokenize():
 def test_new_parse():
     source = '(* (+ 1 2) 5 2)'
     t = tokenize(source)
-    form = parse(t)
-    print(form)
+    form = parse(t)[0]
     assert form
     assert isinstance(form, list)
     assert '*' == form[0].exp
@@ -56,7 +55,7 @@ def test_new_parse():
 
 def test_parse_complex():
     source = '(* (+ 1 (- 2 3)) (- 5 2)'
-    form = parse(tokenize(source))
+    form = parse(tokenize(source))[0]
     assert form
     assert isinstance(form, list)
     assert '*' == form[0].exp
@@ -72,6 +71,20 @@ def test_parse_complex():
     assert '-' == form[2][0].exp
     assert '5' == form[2][1].exp
     assert '2' == form[2][2].exp
+
+
+def test_def_parse():
+    source = '(def a 1) (+ a 1)'
+    form = parse(tokenize(source))
+    assert form
+    assert isinstance(form, list)
+    assert isinstance(form[0][0], Operator)
+    assert 'def' == form[0][0].exp
+    assert 'a' == form[0][1].exp
+    assert '1' == form[0][2].exp
+    assert '+' == form[1][0].exp
+    assert 'a' == form[1][1].exp
+    assert '1' == form[1][2].exp
 
 
 def test_apply():

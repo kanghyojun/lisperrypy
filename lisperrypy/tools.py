@@ -81,8 +81,11 @@ def tokenize_when(source, when, padd=0):
 
 
 def parse(tokens):
+    tree = []
     parser = Parser(tokens)
-    return parser.parse()
+    while parser:
+        tree.append(parser.parse())
+    return tree
 
 
 class Parser(list):
