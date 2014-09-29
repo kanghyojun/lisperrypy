@@ -21,11 +21,16 @@ def test_lambda():
     (def acc (lambda (a) (lambda (b) (+ a b))))
     (app (acc 1) 2)
     '''
+    assert 3 == program(source)
+
+
+def test_scope_lambda():
     src = '''
     (def a (lambda (f) (lambda (g) (lambda (h) (add f g h)))))
-    (def add (lambda (x y z) (+ x y z))) (((a 1) 1) 1)
+    (def add (lambda (x y z) (+ x y z)))
+    (((a 1) 1) 1)
     '''
-    assert 3 == program(source)
+    assert 3 == program(src)
 
 
 @lisperrypy

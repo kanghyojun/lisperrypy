@@ -138,13 +138,13 @@ def evalu(form, env):
         return env[form.exp]
     elif isinstance(form, list):
         r = []
-        if form[0].exp == 'def':
-            def_(form[1].exp, evalu(form[2], env), env)
-        elif form[0].exp == 'lambda':
-            return lambda_(form[1], form[2], env)
-        else:
-            for x in form:
-                r.append(evalu(x, env))
-            if callable(r[0]):
-                return apply_(r[0], r[1:])
+        if isinstance(form[0], Operator):
+            if form[0].exp == 'def':
+                def_(form[1].exp, evalu(form[2], env), env)
+            elif form[0].exp == 'lambda':
+                return lambda_(form[1], form[2], env)
+        for x in form:
+            r.append(evalu(x, env))
+        if callable(r[0]):
+            return apply_(r[0], r[1:])
         return r
