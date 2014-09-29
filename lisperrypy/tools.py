@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from re import compile, match
 from itertools import chain
 from functools import reduce
@@ -35,6 +34,15 @@ def mult(*args):
 def def_(sym, val, env):
     env[sym] = val
     return val
+
+
+def lambda_(sym, body, env):
+    def f(*args):
+        sub_env = env.copy()
+        for arg_name, value in zip(sym, args):
+            sub_env[arg_name.exp] = value
+        return evalu(body, sub_env)
+    return f
 
 
 ENV = {'+': sum_, '-': sub, '*': mult, '/': div}
@@ -132,6 +140,8 @@ def evalu(form, env):
         r = []
         if form[0].exp == 'def':
             def_(form[1].exp, evalu(form[2], env), env)
+        elif form[0].exp == 'lambda':
+            return lambda_(form[1], form[2], env)
         else:
             for x in form:
                 r.append(evalu(x, env))

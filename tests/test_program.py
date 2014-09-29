@@ -11,7 +11,20 @@ def test_program():
     assert 36 == program(source)
     source = '(/ (* 2 (+ 1 2) 3 (- 6 4)) 2)'
     assert 18 == program(source)
-    source = '(def a (lambda (f) (lambda (g) (lambda (h) (add f g h))))) (def add (lambda (x y z) (+ x y z))) (((a 1) 1) 1)'
+
+
+def test_lambda():
+    source = '(def a (lambda (x) (+ x 1))) (a 1)'
+    assert 2 == program(source)
+    source = '''
+    (def app (lambda (f a) (f a)))
+    (def acc (lambda (a) (lambda (b) (+ a b))))
+    (app (acc 1) 2)
+    '''
+    src = '''
+    (def a (lambda (f) (lambda (g) (lambda (h) (add f g h)))))
+    (def add (lambda (x y z) (+ x y z))) (((a 1) 1) 1)
+    '''
     assert 3 == program(source)
 
 
