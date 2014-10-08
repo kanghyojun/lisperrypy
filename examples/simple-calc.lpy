@@ -1,0 +1,4 @@
+(defn simple-calc (x y z)
+  (+ x (* y z)))
+
+(print (simple-calc 1 2 3))
