@@ -48,7 +48,11 @@ def lambda_(sym, body, env):
     return f
 
 
-ENV = {'+': sum_, '-': sub, '*': mult, '/': div, 'print': print}
+def print_(arg):
+    print(arg)
+
+
+ENV = {'+': sum_, '-': sub, '*': mult, '/': div, 'print': print_}
 numbers = ''.join([str(x) for x in range(0,9)]) + '.'
 symbols = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*+_-=<>/?'
 braces = ['[', ']', '(', ')', '{', '}']
