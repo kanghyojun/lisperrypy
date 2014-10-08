@@ -19,4 +19,7 @@ setup(name='lisperrypy',
           'docs': docs_require,
           'tests': tests_require
       },
-      packages=find_packages())
+      packages=find_packages(),
+      entry_points={
+          'console_scripts': 'lisperrypy = lisperrypy.script:main'
+      })

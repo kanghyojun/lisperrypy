@@ -13,7 +13,6 @@ RE = {
     'WHITESPACE': r'\s+'
 }
 
-
 def sum_(*args):
     r = reduce(lambda x, y: x + y, args)
     return r
