@@ -1,0 +1,3 @@
+
+.. automodule:: lisperrypy.tools
+   :members:

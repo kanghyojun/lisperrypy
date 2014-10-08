@@ -36,6 +36,10 @@ def def_(sym, val, env):
     return val
 
 
+def defn(sym_form, param, body, env):
+    return def_(sym_form.exp, lambda_(param, body, env), env)
+
+
 def lambda_(sym, body, env):
     def f(*args):
         sub_env = env.copy()
@@ -141,6 +145,8 @@ def evalu(form, env):
         if isinstance(form[0], Operator):
             if form[0].exp == 'def':
                 def_(form[1].exp, evalu(form[2], env), env)
+            elif form[0].exp == 'defn':
+                return defn(form[1], form[2], form[3], env)
             elif form[0].exp == 'lambda':
                 return lambda_(form[1], form[2], env)
         for x in form:

@@ -33,6 +33,14 @@ def test_scope_lambda():
     assert 3 == program(src)
 
 
+def test_defn():
+    src = '''
+    (defn sum (x y) (+ x y))
+    (sum 1 2)
+    '''
+    assert 3 == program(src)
+
+
 @lisperrypy
 def lisp_sum(x, y):
     return '(+ %s %s)' % (x, y)
